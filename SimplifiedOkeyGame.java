@@ -96,20 +96,28 @@ public class SimplifiedOkeyGame {
 
     }
 
-    /*
+    /* WILL BE DONE
      * TODO: Current computer player will discard the least useful tile.
      * you may choose based on how useful each tile is
      */
     public void discardTileForComputer() {
-
+        Tile[] tiles = players[ currentPlayerIndex ].getTiles();
+        for( int i = 1; i < tiles.length ; i++ ){
+            if( tiles[i].matchingTiles( tiles[ i - 1 ]) ){
+                discardTile(i);// discardingthe duplicate
+                return;
+            }
+        }
     }
 
     /*
-     * TODO: discards the current player's tile at given index
+     * DONE
+     * discards the current player's tile at given index
      * this should set lastDiscardedTile variable and remove that tile from
      * that player's tiles
      */
     public void discardTile(int tileIndex) {
+        lastDiscardedTile = players[ currentPlayerIndex ].getAndRemoveTile(tileIndex);
 
     }
 
