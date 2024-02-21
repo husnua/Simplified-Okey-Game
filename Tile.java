@@ -27,8 +27,8 @@ public class Tile {
        return 0;
     }
 
-    /*
-     * TODO: should determine if this tile and given tile can form a chain together
+    /* DONE
+     * should determine if this tile and given tile can form a chain together
      * this method should check the difference in values of the two tiles
      * should return true if the absoulute value of the difference is 1 (they can form a chain)
      * otherwise, it should return false (they cannot form a chain)

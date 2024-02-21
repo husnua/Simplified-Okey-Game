@@ -21,14 +21,29 @@ public class Player {
     }
 
     /*
-     * TODO: used for finding the longest chain in this player hand
+     * DONE
+     * used for finding the longest chain in this player hand
      * this method should iterate over playerTiles to find the longest chain
      * of consecutive numbers, used for checking the winning condition
      * and also for determining the winner if tile stack has no tiles
      */
     public int findLongestChain() {
         int longestChain = 0;
-
+        int currentChain = 1;
+        for ( int i = 1; i < playerTiles.length; i++){
+            if( playerTiles[ i ].canFormChainWith(playerTiles[ i - 1 ]) ){
+                currentChain += 1;
+            }
+            else{
+                if( longestChain < currentChain ){
+                    longestChain = currentChain;
+                } 
+                currentChain = 1;
+            }
+        }
+        if( longestChain < currentChain ){
+            longestChain = currentChain;
+        } 
         return longestChain;
     }
 
