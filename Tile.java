@@ -34,6 +34,8 @@ public class Tile {
      * otherwise, it should return false (they cannot form a chain)
      */
     public boolean canFormChainWith(Tile t) {
+        if( Math.abs( this.getValue() - t.getValue()) == 1)
+            return true;
         return false;
     }
 
