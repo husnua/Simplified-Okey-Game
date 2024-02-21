@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class SimplifiedOkeyGame {
 
     Player[] players;
@@ -96,18 +98,94 @@ public class SimplifiedOkeyGame {
 
     }
 
-    /* WILL BE DONE
-     * TODO: Current computer player will discard the least useful tile.
+    /* DONE
+     * Current computer player will discard the least useful tile.
      * you may choose based on how useful each tile is
      */
     public void discardTileForComputer() {
         Tile[] tiles = players[ currentPlayerIndex ].getTiles();
         for( int i = 1; i < tiles.length ; i++ ){
             if( tiles[i].matchingTiles( tiles[ i - 1 ]) ){
-                discardTile(i);// discardingthe duplicate
+                discardTile( i );// discardingthe duplicate
                 return;
             }
         }
+        int startIndex = 0, endIndex = 0;
+        ArrayList<Integer> starts,ends;
+        starts = new ArrayList<>();
+        ends = new ArrayList<>();
+        starts.add(0);
+        ends.add(0);
+        for( int i = 1; i < tiles.length ; i++ ){
+            if( tiles[ i - 1 ].canFormChainWith(tiles[ i ])){
+                endIndex = i;
+            }
+            else{
+                starts.add(startIndex);
+                ends.add(endIndex);
+                startIndex = i;
+                endIndex = i;
+            }
+        }
+        starts.add(startIndex);
+        ends.add(endIndex);
+        
+        ends.add(27);
+        starts.add(27);
+        int[] costs = new int[ ends.size() - 1 ];
+        for( int i = 0; i < costs.length; i++){
+            costs[ i ] = 27;
+        } 
+        int currentCost = 0, minCost = 27 ;
+        for(int i = 1; i < starts.size() - 1; i++){
+            currentCost = 0;
+            for(int j = i; j < starts.size() - 1; j++){
+                if( i != j ){
+                    currentCost += starts.get( j ) - ends.get( j - 1 );
+                }
+                if( ends.get( j ) - starts.get( i ) + 1 >= 14){
+                    for( int k = i; k <= j; k++){
+                        costs[ k ] = Math.min( costs[ k ], currentCost);
+                    }
+                    if( currentCost < minCost){
+                        minCost = currentCost;
+                        break;
+                    }
+                }
+                else if( ends.get( j ) - starts.get( i ) + 1 + ( starts.get( i ) - ends.get( i - 1 ) - 1 ) + ( starts.get( j + 1 ) - ends.get( j ) - 1 ) >= 14 ){
+                    for( int k = i; k <= j; k++){
+                        costs[ k ] = Math.min( costs[ k ], currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 )));
+                    }
+                    if( currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 )) < minCost){
+                        minCost = currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 ));
+                    }
+                    continue;
+                }
+            }
+        }
+        int maxIndex = 1, maxValue = 0;
+        for(int i = 1; i < costs.length; i++){
+            if( costs[ i ] > maxValue){
+                maxIndex = i;
+                maxValue = costs[ i ];
+            }
+        }
+        for( int i = 0; i < tiles.length; i++){
+            if( tiles[ i ].getValue() == starts.get(maxIndex) ){
+                startIndex = i;
+            }
+            else if( tiles[ i ].getValue() == ends.get(maxIndex) ){
+                endIndex = i;
+                break;
+            }
+        }
+        if( (tiles[ startIndex ].getValue() - 1) < ( 14 - tiles[ endIndex ].getValue() ) ){
+            discardTile( startIndex );
+        }
+        else{
+            discardTile( endIndex );
+        }
+
     }
 
     /*
