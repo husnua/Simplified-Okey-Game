@@ -28,6 +28,9 @@ public class Player {
      */
     public int findLongestChain() {
         int longestChain = 0;
+        if(longestChain==0){
+            System.out.println("hello");
+        }
 
         return longestChain;
     }
