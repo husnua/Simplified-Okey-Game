@@ -31,7 +31,18 @@ public class Tile {
      * return -1 if the given tile has higher value
      */
     public int compareTo(Tile t) {
-       return 0;
+       if ( t.getValue() < this.value)
+       {
+            return 1;
+       }
+       else if ( t.getValue() == this.value)
+       {
+            return 0;
+       }
+       else 
+       {
+            return -1;
+       }
     }
 
     /* DONE
