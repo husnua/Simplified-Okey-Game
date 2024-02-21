@@ -9,12 +9,19 @@ public class Tile {
         this.value = value;
     }
 
-    /*
-     * TODO: should check if the given tile t and this tile have the same value 
+    /*DONE
+     * : should check if the given tile t and this tile have the same value 
      * return true if they are matching, false otherwise
      */
     public boolean matchingTiles(Tile t) {
+        if ( t.getValue() == this.value)
+        {
+            return true;
+        }
+        else
+        {
         return false;
+        }
     }
 
     /*
@@ -24,11 +31,22 @@ public class Tile {
      * return -1 if the given tile has higher value
      */
     public int compareTo(Tile t) {
-       return 0;
+       if ( t.getValue() < this.value)
+       {
+            return 1;
+       }
+       else if ( t.getValue() == this.value)
+       {
+            return 0;
+       }
+       else 
+       {
+            return -1;
+       }
     }
 
-    /*
-     * TODO: should determine if this tile and given tile can form a chain together
+    /* DONE
+     * should determine if this tile and given tile can form a chain together
      * this method should check the difference in values of the two tiles
      * should return true if the absoulute value of the difference is 1 (they can form a chain)
      * otherwise, it should return false (they cannot form a chain)
