@@ -9,12 +9,19 @@ public class Tile {
         this.value = value;
     }
 
-    /*
-     * TODO: should check if the given tile t and this tile have the same value 
+    /*DONE
+     * : should check if the given tile t and this tile have the same value 
      * return true if they are matching, false otherwise
      */
     public boolean matchingTiles(Tile t) {
+        if ( t.getValue() == this.value)
+        {
+            return true;
+        }
+        else
+        {
         return false;
+        }
     }
 
     /*
