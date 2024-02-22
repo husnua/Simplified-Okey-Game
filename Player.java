@@ -10,14 +10,26 @@ public class Player {
     }
 
     /*
-     * TODO: checks this player's hand to determine if this player is winning
+     * DONE * 
+     * checks this player's hand to determine if this player is winning
      * the player with a complete chain of 14 consecutive numbers wins the game
      * note that the player whose turn is now draws one extra tile to have 15 tiles in hand,
      * and the extra tile does not disturb the longest chain and therefore the winning condition
      * check the assigment text for more details on winning condition
      */
     public boolean checkWinning() {
-        //doing
+        int counter = 1;
+        for(int i = 1; i<numberOfTiles; i++){
+            if(playerTiles[i].getValue() - playerTiles[i-1].getValue() == 1){
+                counter++;
+            }
+            else if(playerTiles[i].getValue != playerTiles[i-1].getValue){
+                counter = 1;
+            }
+        }
+        if(counter>=14){
+            return true;
+        }
         return false;
     }
 
