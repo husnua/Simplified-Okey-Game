@@ -58,28 +58,24 @@ public class SimplifiedOkeyGame {
     }
 
     /*
-     * TODO: should randomly shuffle the tiles array before game starts
+     * TODO *
+     * should randomly shuffle the tiles array before game starts
      */
     public void shuffleTiles() {
-        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         Random rand = new Random(); // instance of random class
-        int n = array.length;
+        int n = tiles.length;
         for (int i = n - 1; i > 0; i--) {
             // Generate a random number between 0 and i (inclusive)
             int j = rand.nextInt(i+1);
-            System.out.println(j);
-            // Swap array[i] with the element at random index
-            int temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-            for (int l : array) {
-                System.out.print(l + " ");
-            }
-            System.out.println("\n");
+            // Swap tiles[i] with the element at random index
+            int temp = tiles[i];
+            tiles[i] = tiles[j];
+            tiles[j] = temp;            
         }
+        /* if needed for checking tiles
         for (int i : array) {
             System.out.print(i + " ");
-        }
+        } */
 
     }
 
