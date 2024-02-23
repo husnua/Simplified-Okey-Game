@@ -18,15 +18,7 @@ public class Player {
      * check the assigment text for more details on winning condition
      */
     public boolean checkWinning() {
-        int counter = 1;
-        for(int i = 1; i<numberOfTiles; i++){
-            if(playerTiles[i].getValue() - playerTiles[i-1].getValue() == 1){
-                counter++;
-            }
-            else if(playerTiles[i].getValue != playerTiles[i-1].getValue){
-                counter = 1;
-            }
-        }
+        int counter = findLongestChain();
         if(counter>=14){
             return true;
         }
@@ -46,6 +38,9 @@ public class Player {
         for ( int i = 1; i < playerTiles.length; i++){
             if( playerTiles[ i ].canFormChainWith(playerTiles[ i - 1 ]) ){
                 currentChain += 1;
+            }
+            else if( playerTiles[ i ].matchingTiles( playerTiles[ i - 1 ])){
+                continue;
             }
             else{
                 if( longestChain < currentChain ){
