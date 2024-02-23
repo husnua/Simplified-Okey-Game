@@ -55,13 +55,16 @@ public class SimplifiedOkeyGame {
         
     }
 
-    /*
-     * TODO: get the last discarded tile for the current player
+    /* DONE
+     * get the last discarded tile for the current player
      * (this simulates picking up the tile discarded by the previous player)
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getLastDiscardedTile() {
-        return null;
+        players[ currentPlayerIndex ].addTile(lastDiscardedTile);
+        Tile picked = lastDiscardedTile;
+        lastDiscardedTile = null;
+        return picked.toString();
     }
 
     /*
