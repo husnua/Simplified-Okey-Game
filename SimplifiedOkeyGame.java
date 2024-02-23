@@ -68,7 +68,7 @@ public class SimplifiedOkeyGame {
             // Generate a random number between 0 and i (inclusive)
             int j = rand.nextInt(i+1);
             // Swap tiles[i] with the element at random index
-            int temp = tiles[i];
+            Tile temp = tiles[i];
             tiles[i] = tiles[j];
             tiles[j] = temp;            
         }
