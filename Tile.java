@@ -24,8 +24,8 @@ public class Tile {
         }
     }
 
-    /*
-     * TODO: should compare the order of these two tiles
+    /*DONE
+     *  should compare the order of these two tiles
      * return 1 if given tile has smaller in value
      * return 0 if they have the same value
      * return -1 if the given tile has higher value

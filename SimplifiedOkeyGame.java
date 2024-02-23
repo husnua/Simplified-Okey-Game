@@ -115,7 +115,15 @@ public class SimplifiedOkeyGame {
      * by checking if it increases the longest chain length, if not get the top tile
      */
     public void pickTileForComputer() {
-
+        Tile[] tiles = players[ currentPlayerIndex ].getTiles();
+        for( int i = 0; i <tiles.length; i++ ){
+            if( tiles[ i ].matchingTiles(lastDiscardedTile) ){ 
+                // if lastDiscardedTile is matching with player's tile, then get top tile 
+                getTopTile();
+                return;
+            }
+        }
+        
     }
 
     /* DONE
