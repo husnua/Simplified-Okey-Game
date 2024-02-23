@@ -105,17 +105,35 @@ public class SimplifiedOkeyGame {
      * finished the game. use checkWinning method of the player class to determine
      */
     public boolean didGameFinish() {
-        if(players[currentPlayerIndex].checkWinning()){
+        if( players[ currentPlayerIndex ].checkWinning()){
             return true;
         }
         return false;
     }
 
-    /* TODO: finds the player who has the highest number for the longest chain
+    /* DONE
+     * finds the player who has the highest number for the longest chain
      * if multiple players have the same length may return multiple players
      */
     public Player[] getPlayerWithHighestLongestChain() {
-        Player[] winners = new Player[1];
+        int highestLength = 0, highestLengthCount = 0;
+        for( int i = 0; i < players.length; i++){
+            if( highestLength < players[ i ].findLongestChain()){
+                highestLength = players[ i ].findLongestChain();
+                highestLengthCount = 1;
+            }
+            else if( highestLength == players[ i ].findLongestChain()){
+                highestLengthCount ++;
+            }
+        }
+
+        Player[] winners = new Player[ highestLengthCount ];
+        
+        for( int i = 0; i < players.length; i++){
+            if( highestLength == players[ i ].findLongestChain()){
+                winners[ --highestLengthCount ] = players[ i ];
+            }
+        }
 
         return winners;
     }
