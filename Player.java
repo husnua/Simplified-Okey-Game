@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Player {
     String playerName;
     Tile[] playerTiles;
@@ -56,19 +58,38 @@ public class Player {
     }
 
     /*
-     * TODO: removes and returns the tile in given index position
+     * DONE: removes and returns the tile in given index position
      */
     public Tile getAndRemoveTile(int index) {
-        return null;
+        Tile wantedTile = this.playerTiles[index];
+        Tile [] tempPlayerTiles = new Tile[playerTiles.length-1];
+        for (int i = 0, j = 0; i < playerTiles.length; i++) {
+            if (i != index) {
+                tempPlayerTiles[j++] = playerTiles[i];
+            }
+        }
+
+        return wantedTile;
     }
 
     /*
-     * TODO: adds the given tile to this player's hand keeping the ascending order
+     * DONE: adds the given tile to this player's hand keeping the ascending order
      * this requires you to loop over the existing tiles to find the correct position,
      * then shift the remaining tiles to the right by one
      */
     public void addTile(Tile t) {
+        int index = 0;
 
+        // finding the correct position for the tile to be inserted
+        while ( index < playerTiles.length && playerTiles[index].getValue() < t.getValue()) { 
+            index++;
+        }
+        // Shifting all the elements in the playerTiles array to the right by one
+        for (int i = playerTiles.length - 1; i > index; i--) {
+            playerTiles[i] = playerTiles[i - 1];
+        }
+        // Inserting the new tile to the array
+        playerTiles[index] = t;
     }
 
     /*
