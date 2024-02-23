@@ -124,8 +124,8 @@ public class SimplifiedOkeyGame {
         return tileCount != 0;
     }
 
-    /*
-     * TODO: pick a tile for the current computer player using one of the following:
+    /*  DONE BUT NEEDS TESTING
+     * pick a tile for the current computer player using one of the following:
      * - picking from the tiles array using getTopTile()
      * - picking from the lastDiscardedTile using getLastDiscardedTile()
      * you should check if getting the discarded tile is useful for the computer
@@ -139,6 +139,79 @@ public class SimplifiedOkeyGame {
                 getTopTile();
                 return;
             }
+        }
+
+        int startIndex = 0, endIndex = 0;
+        ArrayList<Integer> starts,ends;
+        starts = new ArrayList<>();
+        ends = new ArrayList<>();
+        starts.add(0);
+        ends.add(0);
+        for( int i = 1; i < tiles.length ; i++ ){
+            if( tiles[ i - 1 ].canFormChainWith(tiles[ i ]) || tiles[ i - 1 ].matchingTiles(tiles[ i ])){
+                endIndex = i;
+            }
+            else{
+                starts.add(startIndex);
+                ends.add(endIndex);
+                startIndex = i;
+                endIndex = i;
+            }
+        }
+        starts.add(startIndex);
+        ends.add(endIndex);
+        
+        ends.add(27);
+        starts.add(27);
+        int valueOfLastDiscarded = lastDiscardedTile.getValue();
+        int costsSum = 0, costsCount = 0;
+        
+        int currentCost = 0, currentCostWithTile = 0, minCost = 27 ;
+        for(int i = 1; i < starts.size() - 1; i++){
+            currentCost = 0;
+            currentCostWithTile = 0;
+            for(int j = i; j < starts.size() - 1; j++){
+                if( valueOfLastDiscarded < starts.get( i ) && valueOfLastDiscarded > ends.get( i - 1 )){
+
+                }
+                else if( valueOfLastDiscarded < starts.get( j + 1 ) && valueOfLastDiscarded > ends.get( j )){
+
+                }
+                if( i != j ){
+                    if( valueOfLastDiscarded < starts.get( j ) && valueOfLastDiscarded > ends.get( j  - 1))
+                        currentCostWithTile += starts.get( j ) - ends.get( j - 1 ) - 1;
+                    else
+                        currentCostWithTile += starts.get( j ) - ends.get( j - 1 ); 
+                    currentCost += starts.get( j ) - ends.get( j - 1 );
+                }
+                if( ends.get( j ) - starts.get( i ) + 1 >= 14){
+                    for( int k = i; k <= j; k++){
+                        costsSum += currentCost;
+                        costsCount ++;
+                        if (currentCost != currentCostWithTile)
+                            minCost = Math.min(minCost, currentCostWithTile);
+                    }
+                    break;
+                }
+                else if( ends.get( j ) - starts.get( i ) + 1 + ( starts.get( i ) - ends.get( i - 1 ) - 1 ) + ( starts.get( j + 1 ) - ends.get( j ) - 1 ) >= 14 ){
+                    int countOfNeededTiles = 14 - ends.get( j ) - starts.get( i ) + 1;
+                    if( valueOfLastDiscarded < starts.get( j + 1 ) && valueOfLastDiscarded > ends.get( j )){
+                        if( ends.get( j ) + countOfNeededTiles >= valueOfLastDiscarded)
+                            minCost = Math.min(minCost, currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 )) - 1);
+                    }
+                    
+                    costsSum += currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 ));
+                    costsCount ++;
+                    continue;
+                }
+            }
+        }
+        double averageOfCosts = ((double)costsSum)/((double)costsCount);
+        if( minCost <= (int)(averageOfCosts + 1)){
+            System.out.println(getLastDiscardedTile());
+        }
+        else{
+            System.out.println(getTopTile()); 
         }
         
     }
@@ -181,7 +254,7 @@ public class SimplifiedOkeyGame {
         for( int i = 0; i < costs.length; i++){
             costs[ i ] = 27;
         } 
-        int currentCost = 0, minCost = 27 ;
+        int currentCost = 0 ;
         for(int i = 1; i < starts.size() - 1; i++){
             currentCost = 0;
             for(int j = i; j < starts.size() - 1; j++){
@@ -192,17 +265,11 @@ public class SimplifiedOkeyGame {
                     for( int k = i; k <= j; k++){
                         costs[ k ] = Math.min( costs[ k ], currentCost);
                     }
-                    if( currentCost < minCost){
-                        minCost = currentCost;
-                        break;
-                    }
+                    break;
                 }
                 else if( ends.get( j ) - starts.get( i ) + 1 + ( starts.get( i ) - ends.get( i - 1 ) - 1 ) + ( starts.get( j + 1 ) - ends.get( j ) - 1 ) >= 14 ){
                     for( int k = i; k <= j; k++){
                         costs[ k ] = Math.min( costs[ k ], currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 )));
-                    }
-                    if( currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 )) < minCost){
-                        minCost = currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 ));
                     }
                     continue;
                 }
