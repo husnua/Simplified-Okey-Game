@@ -10,7 +10,9 @@ public class Player {
         playerTiles = new Tile[15]; // there are at most 15 tiles a player owns at any time
         numberOfTiles = 0; // currently this player owns 0 tiles, will pick tiles at the beggining of the game
     }
-
+    public int getNumberOfTiles(){
+        return numberOfTiles;
+    }
     /*
      * DONE * 
      * checks this player's hand to determine if this player is winning
@@ -37,7 +39,7 @@ public class Player {
     public int findLongestChain() {
         int longestChain = 0;
         int currentChain = 1;
-        for ( int i = 1; i < playerTiles.length; i++){
+        for ( int i = 1; i < numberOfTiles; i++){
             if( playerTiles[ i ].canFormChainWith(playerTiles[ i - 1 ]) ){
                 currentChain += 1;
             }
@@ -62,13 +64,10 @@ public class Player {
      */
     public Tile getAndRemoveTile(int index) {
         Tile wantedTile = this.playerTiles[index];
-        Tile [] tempPlayerTiles = new Tile[playerTiles.length-1];
-        for (int i = 0, j = 0; i < playerTiles.length; i++) {
-            if (i != index) {
-                tempPlayerTiles[j++] = playerTiles[i];
-            }
+        for (int i = index; i < playerTiles.length - 1; i++) {
+            playerTiles[ i ] = playerTiles[ i + 1 ];
         }
-
+        numberOfTiles--;
         return wantedTile;
     }
 
@@ -81,15 +80,16 @@ public class Player {
         int index = 0;
 
         // finding the correct position for the tile to be inserted
-        while ( index < playerTiles.length && playerTiles[index].getValue() < t.getValue()) { 
+        while ( index < numberOfTiles && playerTiles[index].getValue() < t.getValue()) { 
             index++;
         }
         // Shifting all the elements in the playerTiles array to the right by one
-        for (int i = playerTiles.length - 1; i > index; i--) {
+        for (int i = numberOfTiles ; i > index; i--) {
             playerTiles[i] = playerTiles[i - 1];
         }
         // Inserting the new tile to the array
         playerTiles[index] = t;
+        numberOfTiles++;
     }
 
     /*

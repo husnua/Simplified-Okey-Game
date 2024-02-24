@@ -40,12 +40,12 @@ public class SimplifiedOkeyGame {
         for(int i = 0; i<players.length; i++){
             if(i==0){
                 for(int m = 0; m<15; m++){
-                    players[i].addTile(tiles[m]);
+                    players[i].addTile(tiles[--tileCount]);
                 }
             }
             else{
                 for(int n = k; n<k+14; n++){
-                    players[i].addTile(tiles[n]);
+                    players[i].addTile(tiles[--tileCount]);
                 }
             }
             k += 14; 
@@ -64,7 +64,7 @@ public class SimplifiedOkeyGame {
         players[ currentPlayerIndex ].addTile(lastDiscardedTile);
         Tile picked = lastDiscardedTile;
         lastDiscardedTile = null;
-        return picked.toString();
+        return players[ currentPlayerIndex ].getName() + " picked last discarded " + picked.toString();
     }
 
     /*
@@ -74,7 +74,8 @@ public class SimplifiedOkeyGame {
      * returns the toString method of the tile so that we can print what we picked
      */
     public String getTopTile() {
-        return null;
+        players[ currentPlayerIndex ].addTile( tiles[ --tileCount ]);
+        return players[ currentPlayerIndex ].getName() + " picked from the tile " + tiles[ tileCount ].toString();
     }
 
     /*
@@ -154,29 +155,29 @@ public class SimplifiedOkeyGame {
      */
     public void pickTileForComputer() {
         Tile[] tiles = players[ currentPlayerIndex ].getTiles();
-        for( int i = 0; i <tiles.length; i++ ){
+        for( int i = 0; i <players[ currentPlayerIndex ].getNumberOfTiles(); i++ ){
             if( tiles[ i ].matchingTiles(lastDiscardedTile) ){ 
                 // if lastDiscardedTile is matching with player's tile, then get top tile 
-                getTopTile();
+                System.out.println( getTopTile());
                 return;
             }
         }
 
-        int startIndex = 0, endIndex = 0;
+        int startIndex = tiles[ 0 ].getValue(), endIndex = tiles[ 0 ].getValue();
         ArrayList<Integer> starts,ends;
         starts = new ArrayList<>();
         ends = new ArrayList<>();
         starts.add(0);
         ends.add(0);
-        for( int i = 1; i < tiles.length ; i++ ){
+        for( int i = 1; i < players[ currentPlayerIndex ].getNumberOfTiles() ; i++ ){
             if( tiles[ i - 1 ].canFormChainWith(tiles[ i ]) || tiles[ i - 1 ].matchingTiles(tiles[ i ])){
-                endIndex = i;
+                endIndex = tiles[ i ].getValue();
             }
             else{
                 starts.add(startIndex);
                 ends.add(endIndex);
-                startIndex = i;
-                endIndex = i;
+                startIndex = tiles[ i ].getValue();
+                endIndex = tiles[ i ].getValue();
             }
         }
         starts.add(startIndex);
@@ -192,12 +193,6 @@ public class SimplifiedOkeyGame {
             currentCost = 0;
             currentCostWithTile = 0;
             for(int j = i; j < starts.size() - 1; j++){
-                if( valueOfLastDiscarded < starts.get( i ) && valueOfLastDiscarded > ends.get( i - 1 )){
-
-                }
-                else if( valueOfLastDiscarded < starts.get( j + 1 ) && valueOfLastDiscarded > ends.get( j )){
-
-                }
                 if( i != j ){
                     if( valueOfLastDiscarded < starts.get( j ) && valueOfLastDiscarded > ends.get( j  - 1))
                         currentCostWithTile += starts.get( j ) - ends.get( j - 1 ) - 1;
@@ -220,7 +215,8 @@ public class SimplifiedOkeyGame {
                         if( ends.get( j ) + countOfNeededTiles >= valueOfLastDiscarded)
                             minCost = Math.min(minCost, currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 )) - 1);
                     }
-                    
+                    else if (currentCost != currentCostWithTile)
+                        minCost = Math.min(minCost, currentCostWithTile + (14 - ( ends.get( j ) - starts.get( i ) + 1 )));
                     costsSum += currentCost + (14 - ( ends.get( j ) - starts.get( i ) + 1 ));
                     costsCount ++;
                     continue;
@@ -228,7 +224,7 @@ public class SimplifiedOkeyGame {
             }
         }
         double averageOfCosts = ((double)costsSum)/((double)costsCount);
-        if( minCost <= (int)(averageOfCosts + 1)){
+        if( minCost <= (int)(averageOfCosts)){
             System.out.println(getLastDiscardedTile());
         }
         else{
@@ -243,27 +239,27 @@ public class SimplifiedOkeyGame {
      */
     public void discardTileForComputer() {
         Tile[] tiles = players[ currentPlayerIndex ].getTiles();
-        for( int i = 1; i < tiles.length ; i++ ){
+        for( int i = 1; i < players[ currentPlayerIndex ].getNumberOfTiles(); i++ ){
             if( tiles[i].matchingTiles( tiles[ i - 1 ]) ){
                 discardTile( i );// discardingthe duplicate
                 return;
             }
         }
-        int startIndex = 0, endIndex = 0;
+        int startIndex = tiles[ 0 ].getValue(), endIndex = tiles[ 0 ].getValue();
         ArrayList<Integer> starts,ends;
         starts = new ArrayList<>();
         ends = new ArrayList<>();
         starts.add(0);
         ends.add(0);
-        for( int i = 1; i < tiles.length ; i++ ){
+        for( int i = 1; i < players[ currentPlayerIndex ].getNumberOfTiles() ; i++ ){
             if( tiles[ i - 1 ].canFormChainWith(tiles[ i ])){
-                endIndex = i;
+                endIndex = tiles[ i ].getValue();
             }
             else{
                 starts.add(startIndex);
                 ends.add(endIndex);
-                startIndex = i;
-                endIndex = i;
+                startIndex = tiles[ i ].getValue();
+                endIndex = tiles[ i ].getValue();
             }
         }
         starts.add(startIndex);
@@ -272,7 +268,7 @@ public class SimplifiedOkeyGame {
         ends.add(27);
         starts.add(27);
         int[] costs = new int[ ends.size() - 1 ];
-        for( int i = 0; i < costs.length; i++){
+        for( int i = 1; i < costs.length; i++){
             costs[ i ] = 27;
         } 
         int currentCost = 0 ;
@@ -307,7 +303,7 @@ public class SimplifiedOkeyGame {
             if( tiles[ i ].getValue() == starts.get(maxIndex) ){
                 startIndex = i;
             }
-            else if( tiles[ i ].getValue() == ends.get(maxIndex) ){
+            if( tiles[ i ].getValue() == ends.get(maxIndex) ){
                 endIndex = i;
                 break;
             }
@@ -328,7 +324,9 @@ public class SimplifiedOkeyGame {
      * that player's tiles
      */
     public void discardTile(int tileIndex) {
+
         lastDiscardedTile = players[ currentPlayerIndex ].getAndRemoveTile(tileIndex);
+        System.out.println("Player " + players[ currentPlayerIndex ].getName() + " discarded " + lastDiscardedTile.getValue() );
 
     }
 
