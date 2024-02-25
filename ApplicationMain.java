@@ -82,7 +82,7 @@ public class ApplicationMain {
 
                     while( playerChoice < 0 || playerChoice > 14)
                     {
-                        System.out.print( "Unvalid index, enter another index: ");
+                        System.out.print( "Invalid index, enter another index: ");
                         playerChoice = sc.nextInt();
                     }
 
