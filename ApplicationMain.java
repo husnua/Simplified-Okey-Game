@@ -54,6 +54,11 @@ public class ApplicationMain {
 
                 // after the first turn we can pick up
                 if(!firstTurn) {
+                    while ( playerChoice != 1 && playerChoice != 2)
+                    {
+                        System.out.print( "Enter another choice: ");
+                        playerChoice = sc.nextInt();
+                    }
                     if(playerChoice == 1) {
                         System.out.println("You picked up: " + game.getTopTile());
                         firstTurn = false;
@@ -67,6 +72,11 @@ public class ApplicationMain {
                 }
                 else{
                     // after first turn it is no longer the first turn
+                    while ( playerChoice != 1)
+                    {
+                        System.out.print( "Enter another choice: ");
+                        playerChoice = sc.nextInt();
+                    }
                     firstTurn = false;
                 }
 
